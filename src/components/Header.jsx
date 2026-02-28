@@ -5,9 +5,14 @@ import './Header.css';
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
+    };
+
+    const toggleSearch = () => {
+        setIsSearchOpen(!isSearchOpen);
     };
 
     return (
@@ -48,9 +53,13 @@ const Header = () => {
                     </nav>
 
                     <div className="header-right">
-                        <div className="search-bar">
-                            <input type="text" placeholder="Search products..." />
-                            <button aria-label="Search"><Search size={20} /></button>
+                        <div className={`search-container ${isSearchOpen ? 'expanded' : ''}`}>
+                            <div className="search-input-wrapper">
+                                <input type="text" placeholder="Search products..." />
+                            </div>
+                            <button aria-label="Toggle Search" onClick={toggleSearch} className="search-toggle-btn">
+                                <Search size={20} />
+                            </button>
                         </div>
                         <a href="https://wa.me/917419150418" target="_blank" rel="noopener noreferrer" className="nav-whatsapp-btn desktop-only">
                             WhatsApp
