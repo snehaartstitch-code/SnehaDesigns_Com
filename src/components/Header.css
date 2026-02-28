@@ -182,20 +182,6 @@
     color: var(--color-text);
 }
 
-.nav-whatsapp-btn {
-    background-color: var(--color-secondary);
-    color: var(--color-white);
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius-md);
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-    font-size: 0.9rem;
-}
-
-.nav-whatsapp-btn:hover {
-    background-color: #8b9d77;
-}
-
 .mobile-only {
     display: none !important;
 }

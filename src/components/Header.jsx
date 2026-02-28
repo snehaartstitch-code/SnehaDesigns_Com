@@ -61,9 +61,6 @@ const Header = () => {
                                 <Search size={20} />
                             </button>
                         </div>
-                        <a href="https://wa.me/917419150418" target="_blank" rel="noopener noreferrer" className="nav-whatsapp-btn desktop-only">
-                            WhatsApp
-                        </a>
                     </div>
                 </div>
             </div>
