@@ -22,7 +22,7 @@ const Header = () => {
                             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
                         </button>
                         <Link to="/" className="logo">
-                            <img src="/images/Logo - Square - Transparent BG.png" alt="Sneha Art & Stitch" className="logo-img" />
+                            <img src="./images/Logo - Square - Transparent BG.png" alt="Sneha Art & Stitch" className="logo-img" />
                         </Link>
                     </div>
 

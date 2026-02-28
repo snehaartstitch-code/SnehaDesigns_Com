@@ -11,7 +11,7 @@
     ],
     "description": "Handmade soft crochet mini dogs perfectly sized for little hands. Made with safe, non-toxic organic cotton yarn.",
     "images": [
-      "/images/Crochet Kids Toys (Mini Dogs).jpeg"
+      "./images/Crochet Kids Toys (Mini Dogs).jpeg"
     ],
     "highlights": [
       "100% Cotton Yarn",
@@ -37,8 +37,8 @@
     ],
     "description": "Elegant handmade floral hair clips and headbands that are gentle on your hair and add a pop of color to your look.",
     "images": [
-      "/images/Floral Hair Clips.jpeg",
-      "/images/Handmade Crochet Headband.jpeg"
+      "./images/Floral Hair Clips.jpeg",
+      "./images/Handmade Crochet Headband.jpeg"
     ],
     "highlights": [
       "Gentle elastic",
@@ -58,7 +58,7 @@
     ],
     "description": "Beautiful strawberry keychain. The perfect thoughtful gift.",
     "images": [
-      "/images/Keychain Accessories (Strawberries).jpeg"
+      "./images/Keychain Accessories (Strawberries).jpeg"
     ],
     "highlights": [
       "Cute design",
@@ -81,7 +81,7 @@
     ],
     "description": "Add a touch of floral elegance to your living space with this handcrafted wall decor.",
     "images": [
-      "/images/Floral Handmade Wall Decor.jpeg"
+      "./images/Floral Handmade Wall Decor.jpeg"
     ],
     "highlights": [
       "Natural cotton",
@@ -101,9 +101,9 @@
     ],
     "description": "Cozy, warm, and soft. These handmade baby hats and booties are the ultimate gift for a newborn.",
     "images": [
-      "/images/babycrochetbooties.png",
-      "/images/Baby Hat1.jpeg",
-      "/images/Baby Hat2.jpeg"
+      "./images/babycrochetbooties.png",
+      "./images/Baby Hat1.jpeg",
+      "./images/Baby Hat2.jpeg"
     ],
     "highlights": [
       "Hypoallergenic yarn",
@@ -126,7 +126,7 @@
     ],
     "description": "Vintage-inspired crochet bag. Spacious enough for your daily essentials and strong enough for groceries.",
     "images": [
-      "/images/Crochet Bag.jpeg"
+      "./images/Crochet Bag.jpeg"
     ],
     "highlights": [
       "Lined interior",
@@ -147,7 +147,7 @@
     ],
     "description": "Beautiful soft pink floral scarf to keep you warm and elegant.",
     "images": [
-      "/images/PinkFloralScraf.png"
+      "./images/PinkFloralScraf.png"
     ],
     "highlights": [
       "Soft yarn",

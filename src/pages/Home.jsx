@@ -10,12 +10,12 @@ const Home = () => {
     const newArrivals = productsData.filter(p => p.tags && p.tags.includes('new')).slice(0, 4);
 
     const categories = [
-        { name: "Crochet Gifts", slug: "crochet-gifts", image: "/images/Crochet Kids Toys (Mini Dogs).jpeg" },
-        { name: "Hair Accessories", slug: "hair-accessories", image: "/images/Floral Hair Clips.jpeg" },
-        { name: "Baby Items", slug: "baby-items", image: "/images/babycrochetbooties.png" },
-        { name: "Home Décor", slug: "home-decor", image: "/images/Floral Handmade Wall Decor.jpeg" },
-        { name: "Keychains", slug: "keychains", image: "/images/Keychain Accessories (Strawberries).jpeg" },
-        { name: "Bags", slug: "bags", image: "/images/Crochet Bag.jpeg" }
+        { name: "Crochet Gifts", slug: "crochet-gifts", image: "./images/Crochet Kids Toys (Mini Dogs).jpeg" },
+        { name: "Hair Accessories", slug: "hair-accessories", image: "./images/Floral Hair Clips.jpeg" },
+        { name: "Baby Items", slug: "baby-items", image: "./images/babycrochetbooties.png" },
+        { name: "Home Décor", slug: "home-decor", image: "./images/Floral Handmade Wall Decor.jpeg" },
+        { name: "Keychains", slug: "keychains", image: "./images/Keychain Accessories (Strawberries).jpeg" },
+        { name: "Bags", slug: "bags", image: "./images/Crochet Bag.jpeg" }
     ];
 
     const occasions = [
