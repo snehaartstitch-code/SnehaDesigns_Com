@@ -176,7 +176,18 @@
     display: none !important;
 }
 
-@media (max-width: 1199px) {
+@media (max-width: 1050px) {
+    .nav-links {
+        gap: 1rem;
+        font-size: 0.85rem;
+    }
+
+    .search-bar {
+        display: none;
+    }
+}
+
+@media (max-width: 850px) {
     .mobile-only {
         display: block !important;
     }
@@ -225,10 +236,5 @@
 
     .nav-dropdown:hover .dropdown-menu {
         display: flex;
-    }
-
-    .search-bar {
-        display: none;
-        /* Mobile search generally toggled or placed elsewhere if not simple */
     }
 }
