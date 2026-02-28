@@ -1,0 +1,158 @@
+[
+  {
+    "id": "1",
+    "slug": "soft-crochet-toys",
+    "name": "Soft Crochet Mini Dogs",
+    "price": 850,
+    "category": "crochet-gifts",
+    "tags": [
+      "ready",
+      "best-seller"
+    ],
+    "description": "Handmade soft crochet mini dogs perfectly sized for little hands. Made with safe, non-toxic organic cotton yarn.",
+    "images": [
+      "/images/Crochet Kids Toys (Mini Dogs).jpeg"
+    ],
+    "highlights": [
+      "100% Cotton Yarn",
+      "Safe for newborns",
+      "Washable",
+      "Height: 6 inches"
+    ],
+    "options": [
+      "Brown",
+      "White",
+      "Spotted"
+    ]
+  },
+  {
+    "id": "2",
+    "slug": "floral-hair-clips-set",
+    "name": "Floral Hair Clips & Headbands",
+    "price": 350,
+    "category": "hair-accessories",
+    "tags": [
+      "ready",
+      "new"
+    ],
+    "description": "Elegant handmade floral hair clips and headbands that are gentle on your hair and add a pop of color to your look.",
+    "images": [
+      "/images/Floral Hair Clips.jpeg",
+      "/images/Handmade Crochet Headband.jpeg"
+    ],
+    "highlights": [
+      "Gentle elastic",
+      "Satin-like finish",
+      "Set of 3 daily colors"
+    ],
+    "options": []
+  },
+  {
+    "id": "3",
+    "slug": "strawberry-keychain",
+    "name": "Strawberry Keychain Accessories",
+    "price": 250,
+    "category": "keychains",
+    "tags": [
+      "ready"
+    ],
+    "description": "Beautiful strawberry keychain. The perfect thoughtful gift.",
+    "images": [
+      "/images/Keychain Accessories (Strawberries).jpeg"
+    ],
+    "highlights": [
+      "Cute design",
+      "Durable metal ring"
+    ],
+    "options": [
+      "Red",
+      "Pink"
+    ]
+  },
+  {
+    "id": "4",
+    "slug": "floral-wall-decor",
+    "name": "Floral Handmade Wall Decor",
+    "price": 1200,
+    "category": "home-decor",
+    "tags": [
+      "made-to-order",
+      "best-seller"
+    ],
+    "description": "Add a touch of floral elegance to your living space with this handcrafted wall decor.",
+    "images": [
+      "/images/Floral Handmade Wall Decor.jpeg"
+    ],
+    "highlights": [
+      "Natural cotton",
+      "Beautiful colors",
+      "Size: 12x12 inches"
+    ],
+    "options": []
+  },
+  {
+    "id": "5",
+    "slug": "baby-crochet-booties",
+    "name": "Baby Crochet Booties & Hats",
+    "price": 600,
+    "category": "baby-items",
+    "tags": [
+      "ready"
+    ],
+    "description": "Cozy, warm, and soft. These handmade baby hats and booties are the ultimate gift for a newborn.",
+    "images": [
+      "/images/babycrochetbooties.png",
+      "/images/Baby Hat1.jpeg",
+      "/images/Baby Hat2.jpeg"
+    ],
+    "highlights": [
+      "Hypoallergenic yarn",
+      "Machine washable on gentle"
+    ],
+    "options": [
+      "Pastel Rainbow",
+      "Mint Green",
+      "Soft Peach"
+    ]
+  },
+  {
+    "id": "6",
+    "slug": "granny-square-tote",
+    "name": "Crochet Bag",
+    "price": 1500,
+    "category": "bags",
+    "tags": [
+      "ready"
+    ],
+    "description": "Vintage-inspired crochet bag. Spacious enough for your daily essentials and strong enough for groceries.",
+    "images": [
+      "/images/Crochet Bag.jpeg"
+    ],
+    "highlights": [
+      "Lined interior",
+      "Sturdy straps",
+      "Eco-friendly"
+    ],
+    "options": []
+  },
+  {
+    "id": "7",
+    "slug": "pink-floral-scarf",
+    "name": "Pink Floral Scarf",
+    "price": 950,
+    "category": "crochet-gifts",
+    "tags": [
+      "made-to-order",
+      "new"
+    ],
+    "description": "Beautiful soft pink floral scarf to keep you warm and elegant.",
+    "images": [
+      "/images/PinkFloralScraf.png"
+    ],
+    "highlights": [
+      "Soft yarn",
+      "Warm and stylish"
+    ],
+    "options": []
+  }
+]
