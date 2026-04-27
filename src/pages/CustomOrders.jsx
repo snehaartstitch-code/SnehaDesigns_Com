@@ -12,7 +12,7 @@ const CustomOrders = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const whatsappMessage = encodeURIComponent(`Hi Sneha Art & Stitch, I have a custom order request:
+    const whatsappMessage = encodeURIComponent(`Hi Sneha Designs, I have a custom order request:
 Name: ${formData.name}
 Occasion: ${formData.occasion}
 Details: ${formData.details}`);

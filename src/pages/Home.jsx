@@ -1,11 +1,34 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import productsData from '../data/products.json';
-import { Truck, ShieldCheck, HeartHandshake, PhoneCall, Star } from 'lucide-react';
+import { Truck, ShieldCheck, HeartHandshake, PhoneCall, Star, StarHalf, ChevronLeft, ChevronRight } from 'lucide-react';
 import './Home.css';
 
 const Home = () => {
+    const reviewsRef = useRef(null);
+
+    const scrollReviews = (direction) => {
+        if (reviewsRef.current) {
+            const scrollAmount = reviewsRef.current.offsetWidth / 3 + 32;
+            reviewsRef.current.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+        }
+    };
+
+    const renderStars = (rating) => {
+        const stars = [];
+        for (let i = 1; i <= 5; i++) {
+            if (i <= rating) {
+                stars.push(<Star key={i} size={16} fill="var(--color-accent)" color="var(--color-accent)" />);
+            } else if (i - 0.5 === rating) {
+                stars.push(<StarHalf key={i} size={16} fill="var(--color-accent)" color="var(--color-accent)" />);
+            } else {
+                stars.push(<Star key={i} size={16} fill="transparent" color="var(--color-accent)" />);
+            }
+        }
+        return stars;
+    };
+
     const bestSellers = productsData.filter(p => p.tags && p.tags.includes('best-seller')).slice(0, 4);
     const newArrivals = productsData.filter(p => p.tags && p.tags.includes('new')).slice(0, 4);
 
@@ -20,6 +43,45 @@ const Home = () => {
 
     const occasions = [
         "Birthday", "Baby Shower", "Wedding", "Festive", "Valentine"
+    ];
+
+    const reviews = [
+        {
+            id: 1,
+            text: "bought the strawberry keychain and its literally the cutest thing ever 🥺 quality is amazing and it hasn't frayed at all!",
+            author: "Meera T.",
+            rating: 5
+        },
+        {
+            id: 2,
+            text: "I asked for custom colors for the baby booties for my nephew and they were so helpful. Arrived in like 4 days and the packaging was lovely.",
+            author: "Kabir S.",
+            rating: 4.5
+        },
+        {
+            id: 3,
+            text: "Obsessed with the floral hair clips! My daughter refuses to take them off. The colors are exactly like the pictures.",
+            author: "Neha V.",
+            rating: 5
+        },
+        {
+            id: 4,
+            text: "ordered a couple of crochet bags for gifting. everyone loved the handmade touch. definitely coming back for more.",
+            author: "Riya P.",
+            rating: 4
+        },
+        {
+            id: 5,
+            text: "The handmade wall decor is beautiful, looks so much better in person than in the photos. Completely brightens up my room!",
+            author: "Anjali D.",
+            rating: 4.5
+        },
+        {
+            id: 6,
+            text: "Got a cute lil crochet mini dog for my car dashboard. Quality is super solid and it's holding up well in the heat.",
+            author: "Varun K.",
+            rating: 5
+        }
     ];
 
     return (
@@ -112,16 +174,24 @@ const Home = () => {
             <section className="section-padding reviews-section bg-light">
                 <div className="container">
                     <h2 className="section-title text-center">Customer Love</h2>
-                    <div className="reviews-grid">
-                        {[1, 2, 3].map(i => (
-                            <div key={i} className="review-card">
-                                <div className="stars">
-                                    {[...Array(5)].map((_, j) => <Star key={j} size={16} fill="var(--color-accent)" color="var(--color-accent)" />)}
+                    <div className="reviews-carousel-container" style={{ position: 'relative' }}>
+                        <button className="carousel-arrow left" onClick={() => scrollReviews('left')} aria-label="Previous">
+                            <ChevronLeft size={24} />
+                        </button>
+                        <div className="reviews-grid" ref={reviewsRef}>
+                            {reviews.map(review => (
+                                <div key={review.id} className="review-card">
+                                    <div className="stars">
+                                        {renderStars(review.rating)}
+                                    </div>
+                                    <p className="review-text">"{review.text}"</p>
+                                    <p className="review-author">- {review.author}</p>
                                 </div>
-                                <p className="review-text">"Absolutely love the quality of the crochet items! It's so soft and well-made."</p>
-                                <p className="review-author">- Happy Customer</p>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
+                        <button className="carousel-arrow right" onClick={() => scrollReviews('right')} aria-label="Next">
+                            <ChevronRight size={24} />
+                        </button>
                     </div>
                 </div>
             </section>

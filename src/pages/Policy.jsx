@@ -40,7 +40,7 @@ const Policy = () => {
                     title: "Privacy Policy",
                     content: (
                         <>
-                            <p>At Sneha Art & Stitch, we value your privacy.</p>
+                            <p>At Sneha Designs, we value your privacy.</p>
                             <h2>Information Collection</h2>
                             <p>We only collect the information necessary to process your orders, such as your name, shipping address, and phone number (primarily via WhatsApp).</p>
                             <h2>Use of Information</h2>
@@ -53,7 +53,7 @@ const Policy = () => {
                     title: "Terms of Service",
                     content: (
                         <>
-                            <p>By placing an order with Sneha Art & Stitch, you agree to the following terms:</p>
+                            <p>By placing an order with Sneha Designs, you agree to the following terms:</p>
                             <ul>
                                 <li>All products are handcrafted; slight variations in color, texture, or size may occur.</li>
                                 <li>Custom orders must be paid for in advance and cannot be cancelled once crafting has begun.</li>

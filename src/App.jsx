@@ -9,7 +9,6 @@ import Shop from './pages/Shop';
 import Category from './pages/Category';
 import ProductDetail from './pages/ProductDetail';
 import CustomOrders from './pages/CustomOrders';
-import OrderOnWhatsApp from './pages/OrderOnWhatsApp';
 import Tailoring from './pages/Tailoring';
 import About from './pages/About';
 import Contact from './pages/Contact';
@@ -38,7 +37,6 @@ function App() {
             <Route path="/category/:slug" element={<Category />} />
             <Route path="/product/:slug" element={<ProductDetail />} />
             <Route path="/custom-orders" element={<CustomOrders />} />
-            <Route path="/order-on-whatsapp" element={<OrderOnWhatsApp />} />
             <Route path="/tailoring" element={<Tailoring />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />

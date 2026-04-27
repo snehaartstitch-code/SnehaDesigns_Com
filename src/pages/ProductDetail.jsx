@@ -42,7 +42,7 @@ const ProductDetail = () => {
         }
     };
 
-    const whatsappMessage = encodeURIComponent(`Hi Sneha Art & Stitch, I want to order: ${product.name}\nType: ${typeText}\nVariant: ${selectedVariant || 'N/A'}\nQuantity: ${quantity}\nPincode: ${pincode}\nAddress: `);
+    const whatsappMessage = encodeURIComponent(`Hi Sneha Designs, I want to order: ${product.name}\nType: ${typeText}\nVariant: ${selectedVariant || 'N/A'}\nQuantity: ${quantity}\nPincode: ${pincode}\nAddress: `);
 
     return (
         <div className="product-page">
@@ -147,7 +147,7 @@ const ProductDetail = () => {
                         <h2>Description</h2>
                         <p>{product.description}</p>
                         <h3 className="mt-2rem">The Handmade Story</h3>
-                        <p>Every piece at Sneha Art & Stitch is carefully crafted with premium materials. We believe in taking time to create beautiful goods that last...</p>
+                        <p>Every piece at Sneha Designs is carefully crafted with premium materials. We believe in taking time to create beautiful goods that last...</p>
                         <h3 className="mt-2rem">Care Instructions</h3>
                         <p>Gentle hand wash recommended. Do not wring or bleach. Dry flat in shade to maintain the shape and color of your beautiful handmade item.</p>
                     </div>

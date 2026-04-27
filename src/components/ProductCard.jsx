@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag } from 'lucide-react';
+import { ShoppingBag, Eye } from 'lucide-react';
 import './ProductCard.css';
 
 const ProductCard = ({ product }) => {
@@ -23,7 +23,7 @@ const ProductCard = ({ product }) => {
         }
     };
 
-    const whatsappMessage = encodeURIComponent(`Hi Sneha Art & Stitch, I want to order: ${name}\nType: \nVariant: \nQuantity: 1\nPincode: \nAddress: `);
+    const whatsappMessage = encodeURIComponent(`Hi Sneha Designs, I want to order: ${name}\nType: \nVariant: \nQuantity: 1\nPincode: \nAddress: `);
 
     return (
         <div className="product-card">
@@ -35,7 +35,15 @@ const ProductCard = ({ product }) => {
                         <span>Product Image</span>
                     )}
                 </div>
+                <div className="product-view-overlay">
+                    <span className="btn-view-option">
+                        <Eye size={18} /> View Details
+                    </span>
+                </div>
 
+            </Link>
+
+            <div className="product-info">
                 {tags && tags.length > 0 && (
                     <div className="product-badges">
                         {tags.map(tag => (
@@ -45,9 +53,6 @@ const ProductCard = ({ product }) => {
                         ))}
                     </div>
                 )}
-            </Link>
-
-            <div className="product-info">
                 {displayCategory && <p className="product-category">{displayCategory}</p>}
                 <Link to={`/product/${slug}`}>
                     <h3 className="product-title">{name}</h3>

@@ -22,16 +22,16 @@ const Header = () => {
                             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
                         </button>
                         <Link to="/" className="logo">
-                            <img src="./images/Logo - Square - Transparent BG.png" alt="Sneha Art & Stitch" className="logo-img" />
+                            <img src="./images/Logo - Square - Transparent BG.png" alt="Sneha Designs" className="logo-img" />
                         </Link>
                     </div>
 
                     <nav className={`nav-links ${isMenuOpen ? 'open' : ''}`}>
                         <Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link>
-                        <Link to="/shop" onClick={() => setIsMenuOpen(false)}>Shop</Link>
                         <div className="nav-dropdown">
-                            <span>Categories</span>
+                            <Link to="/shop" onClick={() => setIsMenuOpen(false)}>Shop</Link>
                             <div className="dropdown-menu">
+                                <Link to="/shop" onClick={() => setIsMenuOpen(false)}>All Products</Link>
                                 <Link to="/category/crochet-gifts" onClick={() => setIsMenuOpen(false)}>Crochet Gifts</Link>
                                 <Link to="/category/hair-accessories" onClick={() => setIsMenuOpen(false)}>Hair Accessories</Link>
                                 <Link to="/category/baby-items" onClick={() => setIsMenuOpen(false)}>Baby Items</Link>
@@ -40,11 +40,15 @@ const Header = () => {
                                 <Link to="/category/bags" onClick={() => setIsMenuOpen(false)}>Bags</Link>
                             </div>
                         </div>
-                        <Link to="/custom-orders" onClick={() => setIsMenuOpen(false)}>Custom Orders</Link>
-                        <Link to="/tailoring" onClick={() => setIsMenuOpen(false)}>Tailoring</Link>
+                        <div className="nav-dropdown">
+                            <span>Services</span>
+                            <div className="dropdown-menu">
+                                <Link to="/custom-orders" onClick={() => setIsMenuOpen(false)}>Custom Orders</Link>
+                                <Link to="/tailoring" onClick={() => setIsMenuOpen(false)}>Tailoring</Link>
+                            </div>
+                        </div>
                         <Link to="/about" onClick={() => setIsMenuOpen(false)}>About</Link>
                         <Link to="/contact" onClick={() => setIsMenuOpen(false)}>Contact</Link>
-                        <Link to="/order-on-whatsapp" className="mobile-only" onClick={() => setIsMenuOpen(false)}>Order on WhatsApp</Link>
                     </nav>
 
                     <div className="header-right">

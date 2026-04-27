@@ -8,7 +8,7 @@ const Footer = () => {
         <footer className="footer">
             <div className="container footer-container">
                 <div className="footer-section">
-                    <h3 className="footer-brand">Sneha Art & Stitch</h3>
+                    <h3 className="footer-brand">Sneha Designs</h3>
                     <p className="footer-desc">
                         Handmade with Love, Crafted with Care. Thoughtful crochet and handcrafted pieces for meaningful moments.
                     </p>
@@ -23,8 +23,8 @@ const Footer = () => {
                         </div>
                     </div>
                     <div className="social-links">
-                        <a href="#" className="social-link"><Instagram size={20} /></a>
-                        <a href="#" className="social-link"><Facebook size={20} /></a>
+                        <a href="https://www.instagram.com/snehaartandstitch?igsh=MW03eWlocTNjNWN4aQ==" target="_blank" rel="noopener noreferrer" className="social-link"><Instagram size={20} /></a>
+                        <a href="https://www.facebook.com/share/1DmPFuTWvh/" target="_blank" rel="noopener noreferrer" className="social-link"><Facebook size={20} /></a>
                     </div>
                 </div>
 
@@ -42,7 +42,7 @@ const Footer = () => {
                 <div className="footer-section">
                     <h4 className="footer-heading">Customer Care</h4>
                     <ul className="footer-links">
-                        <li><Link to="/order-on-whatsapp">How to Order</Link></li>
+                        <li><Link to="/contact">How to Order</Link></li>
                         <li><Link to="/policies/shipping">Shipping Policy</Link></li>
                         <li><Link to="/policies/returns">Returns & Refunds</Link></li>
                         <li><Link to="/policies/privacy">Privacy Policy</Link></li>
@@ -53,7 +53,7 @@ const Footer = () => {
 
             <div className="footer-bottom">
                 <div className="container">
-                    <p>&copy; {new Date().getFullYear()} Sneha Art & Stitch. All Rights Reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} Sneha Designs. All Rights Reserved.</p>
                 </div>
             </div>
         </footer>
