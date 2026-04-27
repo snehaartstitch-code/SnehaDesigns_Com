@@ -15,6 +15,11 @@ import Contact from './pages/Contact';
 import Policy from './pages/Policy';
 import SearchPage from './pages/SearchPage';
 
+import ProtectedRoute from './components/ProtectedRoute';
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import ProductForm from './pages/admin/ProductForm';
+
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -41,6 +46,19 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/policies/:type" element={<Policy />} />
+            
+            {/* Admin Routes */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/product/:id" element={
+              <ProtectedRoute>
+                <ProductForm />
+              </ProtectedRoute>
+            } />
           </Routes>
         </main>
         <Footer />

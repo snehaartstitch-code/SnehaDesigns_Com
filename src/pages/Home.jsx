@@ -1,11 +1,12 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
-import productsData from '../data/products.json';
+import { useProducts } from '../hooks/useProducts';
 import { Truck, ShieldCheck, HeartHandshake, PhoneCall, Star, StarHalf, ChevronLeft, ChevronRight } from 'lucide-react';
 import './Home.css';
 
 const Home = () => {
+    const { productsData, loading, error } = useProducts();
     const reviewsRef = useRef(null);
 
     const scrollReviews = (direction) => {
@@ -28,6 +29,9 @@ const Home = () => {
         }
         return stars;
     };
+
+    if (loading) return <div className="section-padding container text-center"><h2>Loading products...</h2></div>;
+    if (error) return <div className="section-padding container text-center"><h2>Error: {error}</h2></div>;
 
     const bestSellers = productsData.filter(p => p.tags && p.tags.includes('best-seller')).slice(0, 4);
     const newArrivals = productsData.filter(p => p.tags && p.tags.includes('new')).slice(0, 4);

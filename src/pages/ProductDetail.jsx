@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Truck, ShieldCheck, CheckCircle2 } from 'lucide-react';
-import productsData from '../data/products.json';
+import { useProducts } from '../hooks/useProducts';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
     const { slug } = useParams();
+    const { productsData, loading } = useProducts();
     const [product, setProduct] = useState(null);
     const [selectedVariant, setSelectedVariant] = useState('');
     const [quantity, setQuantity] = useState(1);
@@ -13,6 +14,7 @@ const ProductDetail = () => {
     const [pincodeMsg, setPincodeMsg] = useState('');
 
     useEffect(() => {
+        if (!productsData || productsData.length === 0) return;
         const foundProduct = productsData.find(p => p.slug === slug);
         setProduct(foundProduct);
         if (foundProduct?.options?.length > 0) {
@@ -20,7 +22,15 @@ const ProductDetail = () => {
         }
         // Scroll to top
         window.scrollTo(0, 0);
-    }, [slug]);
+    }, [slug, productsData]);
+
+    if (loading) {
+        return (
+            <div className="section-padding container text-center">
+                <h2>Loading product details...</h2>
+            </div>
+        );
+    }
 
     if (!product) {
         return (

@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import productsData from '../data/products.json';
+import { useProducts } from '../hooks/useProducts';
 import ProductCard from '../components/ProductCard';
 import './SearchPage.css';
 
 const SearchPage = () => {
+    const { productsData, loading } = useProducts();
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
 
     useEffect(() => {
-        if (query.trim() === '') {
+        if (query.trim() === '' || !productsData) {
             setResults([]);
             return;
         }
@@ -22,7 +23,7 @@ const SearchPage = () => {
             (product.tags && product.tags.some(tag => tag.toLowerCase().includes(searchTerm)))
         );
         setResults(filtered);
-    }, [query]);
+    }, [query, productsData]);
 
     // Categories for suggestions when empty
     const categories = [
@@ -50,7 +51,9 @@ const SearchPage = () => {
                 </div>
 
                 <div className="search-content">
-                    {query.trim() !== '' ? (
+                    {loading ? (
+                        <div className="section-padding text-center"><h2>Loading products...</h2></div>
+                    ) : query.trim() !== '' ? (
                         <div className="search-results">
                             <h2 className="results-count">
                                 {results.length} result{results.length !== 1 ? 's' : ''} for "{query}"

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SlidersHorizontal, X, LayoutGrid, List } from 'lucide-react';
-import productsData from '../data/products.json';
+import { useProducts } from '../hooks/useProducts';
 import ProductCard from '../components/ProductCard';
 import './Shop.css';
 
@@ -10,7 +10,8 @@ const Shop = () => {
     const initCategory = searchParams.get('category') || 'all';
     const initOccasion = searchParams.get('occasion') || 'all';
 
-    const [products, setProducts] = useState(productsData);
+    const { productsData, loading, error } = useProducts();
+    const [products, setProducts] = useState([]);
     const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
     const [viewMode, setViewMode] = useState('grid');
 
@@ -52,6 +53,7 @@ const Shop = () => {
     ];
 
     useEffect(() => {
+        if (!productsData) return;
         let filtered = [...productsData];
 
         // Filter Category
@@ -96,7 +98,7 @@ const Shop = () => {
         }
 
         setProducts(filtered);
-    }, [filters, sortBy]);
+    }, [filters, sortBy, productsData]);
 
     const handleFilterChange = (e) => {
         const { name, value, checked } = e.target;
@@ -248,8 +250,14 @@ const Shop = () => {
                 </div>
 
                 <main className="shop-main">
-                    <p className="results-count">Showing {products.length} products</p>
-                    {products.length > 0 ? (
+                    {loading ? (
+                        <div className="section-padding text-center"><h2>Loading products...</h2></div>
+                    ) : error ? (
+                        <div className="section-padding text-center"><h2>Error: {error}</h2></div>
+                    ) : (
+                        <>
+                            <p className="results-count">Showing {products.length} products</p>
+                            {products.length > 0 ? (
                         <div className={`products-grid ${viewMode === 'list' ? 'list-view' : ''}`}>
                             {products.map(product => (
                                 <ProductCard key={product.id} product={product} />
@@ -263,6 +271,8 @@ const Shop = () => {
                                 Clear Filters
                             </button>
                         </div>
+                            )}
+                        </>
                     )}
                 </main>
             </div>
