@@ -29,7 +29,7 @@ const ProductForm = () => {
     useEffect(() => {
         if (!isNew) {
             const fetchProduct = async () => {
-                const { data, error } = await supabase
+                const { data } = await supabase
                     .from('products')
                     .select('*')
                     .eq('id', id)
@@ -65,7 +65,7 @@ const ProductForm = () => {
             const fileName = `${Math.random()}.${fileExt}`;
             const filePath = `${fileName}`;
 
-            const { error: uploadError, data } = await supabase.storage
+            const { error: uploadError } = await supabase.storage
                 .from('product-images')
                 .upload(filePath, file);
 

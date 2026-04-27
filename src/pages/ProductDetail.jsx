@@ -7,22 +7,27 @@ import './ProductDetail.css';
 const ProductDetail = () => {
     const { slug } = useParams();
     const { productsData, loading } = useProducts();
-    const [product, setProduct] = useState(null);
     const [selectedVariant, setSelectedVariant] = useState('');
     const [quantity, setQuantity] = useState(1);
     const [pincode, setPincode] = useState('');
     const [pincodeMsg, setPincodeMsg] = useState('');
 
+    const product = React.useMemo(() => {
+        if (!productsData || productsData.length === 0) return null;
+        return productsData.find(p => p.slug === slug);
+    }, [slug, productsData]);
+
     useEffect(() => {
-        if (!productsData || productsData.length === 0) return;
-        const foundProduct = productsData.find(p => p.slug === slug);
-        setProduct(foundProduct);
-        if (foundProduct?.options?.length > 0) {
-            setSelectedVariant(foundProduct.options[0]);
+        if (product?.options?.length > 0) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setSelectedVariant(product.options[0]);
         }
+    }, [product]);
+
+    useEffect(() => {
         // Scroll to top
         window.scrollTo(0, 0);
-    }, [slug, productsData]);
+    }, [slug]);
 
     if (loading) {
         return (

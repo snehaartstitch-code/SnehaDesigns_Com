@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useProducts } from '../hooks/useProducts';
@@ -8,21 +8,18 @@ import './SearchPage.css';
 const SearchPage = () => {
     const { productsData, loading } = useProducts();
     const [query, setQuery] = useState('');
-    const [results, setResults] = useState([]);
 
-    useEffect(() => {
+    const results = React.useMemo(() => {
         if (query.trim() === '' || !productsData) {
-            setResults([]);
-            return;
+            return [];
         }
 
         const searchTerm = query.toLowerCase();
-        const filtered = productsData.filter(product =>
+        return productsData.filter(product =>
             product.name.toLowerCase().includes(searchTerm) ||
             product.category.toLowerCase().includes(searchTerm) ||
             (product.tags && product.tags.some(tag => tag.toLowerCase().includes(searchTerm)))
         );
-        setResults(filtered);
     }, [query, productsData]);
 
     // Categories for suggestions when empty

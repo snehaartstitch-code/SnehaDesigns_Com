@@ -8,10 +8,8 @@ import './Shop.css';
 const Shop = () => {
     const [searchParams] = useSearchParams();
     const initCategory = searchParams.get('category') || 'all';
-    const initOccasion = searchParams.get('occasion') || 'all';
 
     const { productsData, loading, error } = useProducts();
-    const [products, setProducts] = useState([]);
     const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
     const [viewMode, setViewMode] = useState('grid');
 
@@ -23,37 +21,8 @@ const Shop = () => {
 
     const [sortBy, setSortBy] = useState('popular');
 
-    useEffect(() => {
-        const cat = searchParams.get('category');
-        if (cat && cat !== 'all') {
-            setFilters(prev => ({ ...prev, category: [cat] }));
-        } else if (cat === 'all') {
-            setFilters(prev => ({ ...prev, category: [] }));
-        }
-    }, [searchParams]);
-
-    const categories = [
-        { value: 'crochet-gifts', label: 'Crochet Gifts' },
-        { value: 'hair-accessories', label: 'Hair Accessories' },
-        { value: 'baby-items', label: 'Baby Items' },
-        { value: 'home-decor', label: 'Home Décor' },
-        { value: 'keychains', label: 'Keychains' },
-        { value: 'bags', label: 'Bags' }
-    ];
-
-    const types = [
-        { value: 'ready', label: 'Ready Stock' },
-        { value: 'made-to-order', label: 'Made-to-Order' }
-    ];
-
-    const priceRanges = [
-        { value: 'under-500', label: 'Under ₹500' },
-        { value: '500-1000', label: '₹500 - ₹1000' },
-        { value: 'over-1000', label: 'Over ₹1000' }
-    ];
-
-    useEffect(() => {
-        if (!productsData) return;
+    const products = React.useMemo(() => {
+        if (!productsData) return [];
         let filtered = [...productsData];
 
         // Filter Category
@@ -97,8 +66,39 @@ const Shop = () => {
             });
         }
 
-        setProducts(filtered);
+        return filtered;
     }, [filters, sortBy, productsData]);
+
+    useEffect(() => {
+        const cat = searchParams.get('category');
+        if (cat && cat !== 'all') {
+            setFilters(prev => ({ ...prev, category: [cat] }));
+        } else if (cat === 'all') {
+            setFilters(prev => ({ ...prev, category: [] }));
+        }
+    }, [searchParams]);
+
+    const categories = [
+        { value: 'crochet-gifts', label: 'Crochet Gifts' },
+        { value: 'hair-accessories', label: 'Hair Accessories' },
+        { value: 'baby-items', label: 'Baby Items' },
+        { value: 'home-decor', label: 'Home Décor' },
+        { value: 'keychains', label: 'Keychains' },
+        { value: 'bags', label: 'Bags' }
+    ];
+
+    const types = [
+        { value: 'ready', label: 'Ready Stock' },
+        { value: 'made-to-order', label: 'Made-to-Order' }
+    ];
+
+    const priceRanges = [
+        { value: 'under-500', label: 'Under ₹500' },
+        { value: '500-1000', label: '₹500 - ₹1000' },
+        { value: 'over-1000', label: 'Over ₹1000' }
+    ];
+
+
 
     const handleFilterChange = (e) => {
         const { name, value, checked } = e.target;
@@ -120,7 +120,7 @@ const Shop = () => {
         setIsMobileFilterOpen(!isMobileFilterOpen);
     };
 
-    const FilterSidebar = () => (
+    const SidebarContent = (
         <div className="filter-content">
             <div className="filter-header-action" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                 <span style={{ fontSize: '0.85rem', color: 'var(--color-text-light)' }}>
@@ -229,7 +229,7 @@ const Shop = () => {
             <div className="shop-layout">
                 <aside className="shop-sidebar desktop-only">
                     <h3>Filters</h3>
-                    <FilterSidebar />
+                    {SidebarContent}
                 </aside>
 
                 <div className={`mobile-filter-overlay ${isMobileFilterOpen ? 'open' : ''}`} onClick={toggleMobileFilter}>
@@ -239,7 +239,7 @@ const Shop = () => {
                             <button onClick={toggleMobileFilter} className="close-btn"><X size={24} /></button>
                         </div>
                         <div className="mobile-filter-body">
-                            <FilterSidebar />
+                            {SidebarContent}
                         </div>
                         <div className="mobile-filter-footer">
                             <button className="btn-primary" style={{ width: '100%' }} onClick={toggleMobileFilter}>
