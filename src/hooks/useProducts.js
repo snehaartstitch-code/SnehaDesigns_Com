@@ -6,27 +6,28 @@ export function useProducts() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        async function fetchProducts() {
-            try {
-                setLoading(true);
-                const { data, error } = await supabase
-                    .from('products')
-                    .select('*')
-                    .order('id');
-                
-                if (error) throw error;
-                if (data) setProducts(data);
-            } catch (err) {
-                setError(err.message);
-                console.error('Error fetching products:', err);
-            } finally {
-                setLoading(false);
-            }
+    const fetchProducts = async () => {
+        try {
+            setLoading(true);
+            const { data, error } = await supabase
+                .from('products')
+                .select('*')
+                .neq('category', 'system')
+                .order('id');
+            
+            if (error) throw error;
+            if (data) setProducts(data);
+        } catch (err) {
+            setError(err.message);
+            console.error('Error fetching products:', err);
+        } finally {
+            setLoading(false);
         }
+    };
 
+    useEffect(() => {
         fetchProducts();
     }, []);
 
-    return { productsData: products, loading, error };
+    return { productsData: products, loading, error, refreshProducts: fetchProducts };
 }

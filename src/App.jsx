@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Header from './components/Header';
 import Footer from './components/Footer';
 import WhatsAppBtn from './components/WhatsAppBtn';
+import { FavoritesProvider } from './context/FavoritesContext';
+import { CartProvider } from './context/CartContext';
+import CartDrawer from './components/CartDrawer';
 
 import Home from './pages/Home';
 import Shop from './pages/Shop';
@@ -14,11 +17,13 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Policy from './pages/Policy';
 import SearchPage from './pages/SearchPage';
+import Favorites from './pages/Favorites';
 
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import ProductForm from './pages/admin/ProductForm';
+import AdminCategories from './pages/admin/AdminCategories';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -31,6 +36,8 @@ const ScrollToTop = () => {
 function App() {
   return (
     <Router>
+      <FavoritesProvider>
+      <CartProvider>
       <ScrollToTop />
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <Header />
@@ -39,6 +46,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/search" element={<SearchPage />} />
+            <Route path="/favorites" element={<Favorites />} />
             <Route path="/category/:slug" element={<Category />} />
             <Route path="/product/:slug" element={<ProductDetail />} />
             <Route path="/custom-orders" element={<CustomOrders />} />
@@ -59,11 +67,19 @@ function App() {
                 <ProductForm />
               </ProtectedRoute>
             } />
+            <Route path="/admin/categories" element={
+              <ProtectedRoute>
+                <AdminCategories />
+              </ProtectedRoute>
+            } />
           </Routes>
         </main>
         <Footer />
         <WhatsAppBtn />
+        <CartDrawer />
       </div>
+      </CartProvider>
+      </FavoritesProvider>
     </Router>
   );
 }

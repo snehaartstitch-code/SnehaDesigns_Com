@@ -15,7 +15,7 @@ const About = () => {
                 <div style={{ marginTop: '3rem' }}>
                     <h3>The Maker Behind the Brand</h3>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '2rem 0' }}>
-                        <img src="./images/founderimage.png" alt="Neha - Founder" style={{ width: '200px', height: '200px', borderRadius: '50%', objectFit: 'cover', border: '4px solid var(--color-base)', boxShadow: 'var(--shadow-md)' }} />
+                        <img src="/images/founderimage.png" alt="Neha - Founder" style={{ width: '200px', height: '200px', borderRadius: '50%', objectFit: 'cover', border: '4px solid var(--color-base)', boxShadow: 'var(--shadow-md)' }} />
                     </div>
                     <p>Hi, I am Neha! I've been crocheting and crafting for years. What started as a hobby of making gifts for friends and family soon turned into a deep passion. I realized that handmade items carry a special kind of energy—they are made with time, patience, and lots of love.</p>
                     <p>Thank you for supporting my small business and choosing handmade.</p>

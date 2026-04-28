@@ -1,13 +1,44 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import { useProducts } from '../hooks/useProducts';
+import { getImageUrl } from '../utils/helpers';
+import { supabase } from '../supabaseClient';
 import { Truck, ShieldCheck, HeartHandshake, PhoneCall, Star, StarHalf, ChevronLeft, ChevronRight } from 'lucide-react';
 import './Home.css';
 
+const defaultCategories = [
+    { name: "Crochet Gifts", slug: "crochet-gifts", image: "./images/Crochet Kids Toys (Mini Dogs).jpeg" },
+    { name: "Hair Accessories", slug: "hair-accessories", image: "./images/Floral Hair Clips.jpeg" },
+    { name: "Baby Items", slug: "baby-items", image: "./images/babycrochetbooties.png" },
+    { name: "Home Décor", slug: "home-decor", image: "./images/Floral Handmade Wall Decor.jpeg" },
+    { name: "Keychains", slug: "keychains", image: "./images/Keychain Accessories (Strawberries).jpeg" },
+    { name: "Bags", slug: "bags", image: "./images/Crochet Bag.jpeg" }
+];
+
 const Home = () => {
     const { productsData, loading, error } = useProducts();
+    const [categories, setCategories] = useState(defaultCategories);
     const reviewsRef = useRef(null);
+
+    React.useEffect(() => {
+        const fetchCategories = async () => {
+            const { data } = await supabase
+                .from('products')
+                .select('description')
+                .eq('id', 'system-categories')
+                .single();
+            
+            if (data && data.description) {
+                try {
+                    setCategories(JSON.parse(data.description));
+                } catch (e) {
+                    console.error("Failed to parse categories", e);
+                }
+            }
+        };
+        fetchCategories();
+    }, []);
 
     const scrollReviews = (direction) => {
         if (reviewsRef.current) {
@@ -35,15 +66,6 @@ const Home = () => {
 
     const bestSellers = productsData.filter(p => p.tags && p.tags.includes('best-seller')).slice(0, 4);
     const newArrivals = productsData.filter(p => p.tags && p.tags.includes('new')).slice(0, 4);
-
-    const categories = [
-        { name: "Crochet Gifts", slug: "crochet-gifts", image: "./images/Crochet Kids Toys (Mini Dogs).jpeg" },
-        { name: "Hair Accessories", slug: "hair-accessories", image: "./images/Floral Hair Clips.jpeg" },
-        { name: "Baby Items", slug: "baby-items", image: "./images/babycrochetbooties.png" },
-        { name: "Home Décor", slug: "home-decor", image: "./images/Floral Handmade Wall Decor.jpeg" },
-        { name: "Keychains", slug: "keychains", image: "./images/Keychain Accessories (Strawberries).jpeg" },
-        { name: "Bags", slug: "bags", image: "./images/Crochet Bag.jpeg" }
-    ];
 
     const occasions = [
         "Birthday", "Baby Shower", "Wedding", "Festive", "Valentine"
@@ -120,7 +142,7 @@ const Home = () => {
                         {categories.map(cat => (
                             <Link to={`/category/${cat.slug}`} key={cat.slug} className="category-tile">
                                 <div className="category-image">
-                                    <img src={cat.image} alt={cat.name} />
+                                    <img src={getImageUrl(cat.image)} alt={cat.name} />
                                 </div>
                                 <h3>{cat.name}</h3>
                             </Link>

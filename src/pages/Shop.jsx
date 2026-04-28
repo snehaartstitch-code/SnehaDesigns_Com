@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { SlidersHorizontal, X, LayoutGrid, List } from 'lucide-react';
+import { SlidersHorizontal, X, LayoutGrid, List, Plus } from 'lucide-react';
 import { useProducts } from '../hooks/useProducts';
+import { useCategories } from '../hooks/useCategories';
 import ProductCard from '../components/ProductCard';
 import './Shop.css';
 
@@ -10,6 +11,7 @@ const Shop = () => {
     const initCategory = searchParams.get('category') || 'all';
 
     const { productsData, loading, error } = useProducts();
+    const { categories: rawCategories } = useCategories();
     const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
     const [viewMode, setViewMode] = useState('grid');
 
@@ -78,14 +80,8 @@ const Shop = () => {
         }
     }, [searchParams]);
 
-    const categories = [
-        { value: 'crochet-gifts', label: 'Crochet Gifts' },
-        { value: 'hair-accessories', label: 'Hair Accessories' },
-        { value: 'baby-items', label: 'Baby Items' },
-        { value: 'home-decor', label: 'Home Décor' },
-        { value: 'keychains', label: 'Keychains' },
-        { value: 'bags', label: 'Bags' }
-    ];
+    // Build the category list in the shape this sidebar expects
+    const categories = rawCategories.map(c => ({ value: c.slug, label: c.name }));
 
     const types = [
         { value: 'ready', label: 'Ready Stock' },
@@ -186,45 +182,62 @@ const Shop = () => {
         <div className="shop-page container">
             <div className="shop-header">
                 <h1 className="shop-title">Shop All Collection</h1>
-                <div className="shop-controls">
-                    <button className="mobile-filter-btn" onClick={toggleMobileFilter}>
-                        <SlidersHorizontal size={20} />
-                        Filters
-                    </button>
-
-                    <div className="sort-control">
-                        <label htmlFor="sort">Sort by:</label>
-                        <select
-                            id="sort"
-                            value={sortBy}
-                            onChange={(e) => setSortBy(e.target.value)}
-                            className="sort-select"
-                        >
-                            <option value="popular">Popular</option>
-                            <option value="newest">Newest</option>
-                            <option value="price-low">Price: Low to High</option>
-                            <option value="price-high">Price: High to Low</option>
-                        </select>
+            </div>
+            <div className="shop-controls">
+                    <div className="mobile-sort-filter">
+                        <div className="sort-wrapper">
+                            <label htmlFor="sort-mobile" className="sort-label-btn">SORT BY <Plus size={16} /></label>
+                            <select
+                                id="sort-mobile"
+                                value={sortBy}
+                                onChange={(e) => setSortBy(e.target.value)}
+                                className="sort-select hidden-select"
+                            >
+                                <option value="popular">Popular</option>
+                                <option value="newest">Newest</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                            </select>
+                        </div>
+                        <button className="filter-label-btn" onClick={toggleMobileFilter}>
+                            FILTER <SlidersHorizontal size={16} />
+                        </button>
                     </div>
 
-                    <div className="view-toggle desktop-only">
-                        <button 
-                            className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
-                            onClick={() => setViewMode('grid')}
-                            title="Grid View"
-                        >
-                            <LayoutGrid size={20} />
-                        </button>
-                        <button 
-                            className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
-                            onClick={() => setViewMode('list')}
-                            title="List View"
-                        >
-                            <List size={20} />
-                        </button>
+                    <div className="desktop-controls desktop-only">
+                        <div className="sort-control">
+                            <label htmlFor="sort">Sort by:</label>
+                            <select
+                                id="sort"
+                                value={sortBy}
+                                onChange={(e) => setSortBy(e.target.value)}
+                                className="sort-select"
+                            >
+                                <option value="popular">Popular</option>
+                                <option value="newest">Newest</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                            </select>
+                        </div>
+
+                        <div className="view-toggle">
+                            <button 
+                                className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
+                                onClick={() => setViewMode('grid')}
+                                title="Grid View"
+                            >
+                                <LayoutGrid size={20} />
+                            </button>
+                            <button 
+                                className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
+                                onClick={() => setViewMode('list')}
+                                title="List View"
+                            >
+                                <List size={20} />
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
             <div className="shop-layout">
                 <aside className="shop-sidebar desktop-only">

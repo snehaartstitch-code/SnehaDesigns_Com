@@ -199,25 +199,29 @@
 .products-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    gap: 2px;
 }
 
 @media (min-width: 768px) {
     .products-grid {
         grid-template-columns: repeat(3, 1fr);
+        gap: 2px;
     }
 }
 
 @media (min-width: 1024px) {
     .products-grid {
         grid-template-columns: repeat(4, 1fr);
+        gap: 2px;
     }
 }
 
 @media (max-width: 600px) {
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
+        gap: 2px;
+        margin-left: -1.5rem;
+        margin-right: -1.5rem;
     }
 }
 

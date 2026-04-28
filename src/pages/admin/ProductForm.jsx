@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Upload, X, ArrowLeft } from 'lucide-react';
 import { supabase } from '../../supabaseClient';
+import { getImageUrl } from '../../utils/helpers';
+import { useCategories } from '../../hooks/useCategories';
 import './Admin.css';
 
 const ProductForm = () => {
     const { id } = useParams();
     const isNew = id === 'new';
     const navigate = useNavigate();
+
+    const { categories: categoryList } = useCategories();
 
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(!isNew);
@@ -18,13 +22,20 @@ const ProductForm = () => {
         slug: '',
         name: '',
         price: '',
-        category: 'crochet-gifts',
+        category: '',
         description: '',
         tags: '',
         highlights: '',
         options: '',
         images: []
     });
+
+    // Once categories load, set default for new products
+    useEffect(() => {
+        if (isNew && categoryList.length > 0 && !formData.category) {
+            setFormData(prev => ({ ...prev, category: categoryList[0].slug }));
+        }
+    }, [categoryList, isNew]);
 
     useEffect(() => {
         if (!isNew) {
@@ -56,35 +67,42 @@ const ProductForm = () => {
     };
 
     const handleImageUpload = async (e) => {
-        try {
-            setUploading(true);
-            const file = e.target.files[0];
-            if (!file) return;
+        const files = Array.from(e.target.files);
+        if (!files.length) return;
 
-            const fileExt = file.name.split('.').pop();
-            const fileName = `${Math.random()}.${fileExt}`;
-            const filePath = `${fileName}`;
+        setUploading(true);
+        const uploadedUrls = [];
 
-            const { error: uploadError } = await supabase.storage
-                .from('product-images')
-                .upload(filePath, file);
+        for (const file of files) {
+            try {
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Math.random()}.${fileExt}`;
+                const filePath = `${fileName}`;
 
-            if (uploadError) throw uploadError;
+                const { error: uploadError } = await supabase.storage
+                    .from('product-images')
+                    .upload(filePath, file);
 
-            const { data: { publicUrl } } = supabase.storage
-                .from('product-images')
-                .getPublicUrl(filePath);
+                if (uploadError) throw uploadError;
 
-            setFormData(prev => ({
-                ...prev,
-                images: [...prev.images, publicUrl]
-            }));
+                const { data: { publicUrl } } = supabase.storage
+                    .from('product-images')
+                    .getPublicUrl(filePath);
 
-        } catch (error) {
-            alert('Error uploading image: ' + error.message);
-        } finally {
-            setUploading(false);
+                uploadedUrls.push(publicUrl);
+            } catch (error) {
+                alert(`Error uploading ${file.name}: ` + error.message);
+            }
         }
+
+        setFormData(prev => ({
+            ...prev,
+            images: [...prev.images, ...uploadedUrls]
+        }));
+
+        setUploading(false);
+        // Reset the input so the same files can be re-selected if needed
+        e.target.value = '';
     };
 
     const removeImage = (indexToRemove) => {
@@ -102,10 +120,13 @@ const ProductForm = () => {
         const highlightsArray = formData.highlights.split('\n').map(h => h.trim()).filter(Boolean);
         const optionsArray = formData.options.split(',').map(o => o.trim()).filter(Boolean);
 
+        const rawSlug = formData.slug || formData.name;
+        const finalSlug = rawSlug.trim().toLowerCase().replace(/[\s_]+/g, '-');
+
         const productPayload = {
             id: isNew ? Date.now().toString() : formData.id,
-            slug: formData.slug || formData.name.toLowerCase().replace(/\\s+/g, '-'),
-            name: formData.name,
+            slug: finalSlug,
+            name: formData.name.trim(),
             price: Number(formData.price),
             category: formData.category,
             description: formData.description,
@@ -158,12 +179,9 @@ const ProductForm = () => {
                         <div className="form-group">
                             <label>Category</label>
                             <select className="form-input" name="category" value={formData.category} onChange={handleChange} required>
-                                <option value="crochet-gifts">Crochet Gifts</option>
-                                <option value="hair-accessories">Hair Accessories</option>
-                                <option value="baby-items">Baby Items</option>
-                                <option value="home-decor">Home Décor</option>
-                                <option value="keychains">Keychains</option>
-                                <option value="bags">Bags</option>
+                                {categoryList.map(cat => (
+                                    <option key={cat.slug} value={cat.slug}>{cat.name}</option>
+                                ))}
                             </select>
                         </div>
                     </div>
@@ -195,7 +213,7 @@ const ProductForm = () => {
                         <div className="image-preview-container">
                             {formData.images.map((img, idx) => (
                                 <div key={idx} className="image-preview">
-                                    <img src={img} alt={`Product ${idx}`} />
+                                    <img src={getImageUrl(img)} alt={`Product ${idx}`} />
                                     <button type="button" className="remove-image-btn" onClick={() => removeImage(idx)}>
                                         <X size={14} />
                                     </button>
@@ -212,6 +230,7 @@ const ProductForm = () => {
                                 id="image-upload" 
                                 type="file" 
                                 accept="image/*" 
+                                multiple
                                 onChange={handleImageUpload} 
                                 style={{ display: 'none' }} 
                                 disabled={uploading}
@@ -219,7 +238,7 @@ const ProductForm = () => {
                         </div>
                     </div>
 
-                    <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+                    <div className="admin-form-actions" style={{ marginTop: '2rem', display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
                         <button type="button" className="btn-secondary" onClick={() => navigate('/admin')}>Cancel</button>
                         <button type="submit" className="btn-primary" disabled={loading}>
                             {loading ? 'Saving...' : 'Save Product'}

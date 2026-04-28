@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Truck, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { Truck, ShieldCheck, CheckCircle2, ShoppingBag, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, X, Maximize2 } from 'lucide-react';
 import { useProducts } from '../hooks/useProducts';
+import { getImageUrl } from '../utils/helpers';
+import { useCart } from '../context/CartContext';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -11,10 +13,20 @@ const ProductDetail = () => {
     const [quantity, setQuantity] = useState(1);
     const [pincode, setPincode] = useState('');
     const [pincodeMsg, setPincodeMsg] = useState('');
+    const { addToCart } = useCart();
+    const [cartAdded, setCartAdded] = useState(false);
+    const [activeImageIndex, setActiveImageIndex] = useState(0);
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [zoomLevel, setZoomLevel] = useState(1);
 
+    // Derive product first so callbacks below can reference it
     const product = React.useMemo(() => {
         if (!productsData || productsData.length === 0) return null;
-        return productsData.find(p => p.slug === slug);
+        return productsData.find(p => {
+            const cleanUrlSlug = slug.toLowerCase().replace(/[\s_]+/g, '-');
+            const cleanDbSlug = p.slug?.trim().toLowerCase().replace(/[\s_]+/g, '-');
+            return p.slug === slug || cleanDbSlug === cleanUrlSlug;
+        });
     }, [slug, productsData]);
 
     useEffect(() => {
@@ -27,7 +39,47 @@ const ProductDetail = () => {
     useEffect(() => {
         // Scroll to top
         window.scrollTo(0, 0);
+        setActiveImageIndex(0);
     }, [slug]);
+
+    const openLightbox = useCallback((idx) => {
+        setActiveImageIndex(idx);
+        setZoomLevel(1);
+        setLightboxOpen(true);
+        document.body.style.overflow = 'hidden';
+    }, []);
+
+    const closeLightbox = useCallback(() => {
+        setLightboxOpen(false);
+        setZoomLevel(1);
+        document.body.style.overflow = '';
+    }, []);
+
+    const lightboxPrev = useCallback(() => {
+        if (!product) return;
+        setActiveImageIndex(i => (i - 1 + product.images.length) % product.images.length);
+        setZoomLevel(1);
+    }, [product]);
+
+    const lightboxNext = useCallback(() => {
+        if (!product) return;
+        setActiveImageIndex(i => (i + 1) % product.images.length);
+        setZoomLevel(1);
+    }, [product]);
+
+    // Keyboard navigation for lightbox
+    useEffect(() => {
+        if (!lightboxOpen) return;
+        const handleKey = (e) => {
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') lightboxPrev();
+            if (e.key === 'ArrowRight') lightboxNext();
+            if (e.key === '+' || e.key === '=') setZoomLevel(z => Math.min(z + 0.5, 4));
+            if (e.key === '-') setZoomLevel(z => Math.max(z - 0.5, 1));
+        };
+        window.addEventListener('keydown', handleKey);
+        return () => window.removeEventListener('keydown', handleKey);
+    }, [lightboxOpen, closeLightbox, lightboxPrev, lightboxNext]);
 
     if (loading) {
         return (
@@ -60,20 +112,78 @@ const ProductDetail = () => {
     const whatsappMessage = encodeURIComponent(`Hi Sneha Designs, I want to order: ${product.name}\nType: ${typeText}\nVariant: ${selectedVariant || 'N/A'}\nQuantity: ${quantity}\nPincode: ${pincode}\nAddress: `);
 
     return (
+        <>
         <div className="product-page">
             <div className="container">
                 <div className="product-layout">
                     {/* Gallery - Left */}
                     <div className="product-gallery">
                         <div className="main-image">
-                            <div className="image-placeholder">
+                            <div
+                                className="image-placeholder clickable-image"
+                                onClick={() => product.images?.length > 0 && openLightbox(activeImageIndex)}
+                                title="Click to view full image"
+                            >
                                 {product.images?.length > 0 ? (
-                                    <img src={product.images[0]} alt={product.name} />
+                                    <img
+                                        src={getImageUrl(product.images[activeImageIndex])}
+                                        alt={`${product.name} - image ${activeImageIndex + 1}`}
+                                        key={activeImageIndex}
+                                        className="gallery-main-img"
+                                    />
                                 ) : (
                                     <span>Product Image</span>
                                 )}
+                                {product.images?.length > 0 && (
+                                    <div className="expand-hint">
+                                        <Maximize2 size={16} />
+                                        <span>View Full Image</span>
+                                    </div>
+                                )}
                             </div>
+                            {product.images?.length > 1 && (
+                                <>
+                                    <button
+                                        className="carousel-btn carousel-btn-prev"
+                                        onClick={() => setActiveImageIndex(i => (i - 1 + product.images.length) % product.images.length)}
+                                        aria-label="Previous image"
+                                    >
+                                        <ChevronLeft size={22} />
+                                    </button>
+                                    <button
+                                        className="carousel-btn carousel-btn-next"
+                                        onClick={() => setActiveImageIndex(i => (i + 1) % product.images.length)}
+                                        aria-label="Next image"
+                                    >
+                                        <ChevronRight size={22} />
+                                    </button>
+                                    <div className="carousel-dots">
+                                        {product.images.map((_, idx) => (
+                                            <button
+                                                key={idx}
+                                                className={`carousel-dot ${idx === activeImageIndex ? 'active' : ''}`}
+                                                onClick={() => setActiveImageIndex(idx)}
+                                                aria-label={`View image ${idx + 1}`}
+                                            />
+                                        ))}
+                                    </div>
+                                </>
+                            )}
                         </div>
+                        {product.images?.length > 1 && (
+                            <div className="thumbnail-strip">
+                                {product.images.map((img, idx) => (
+                                    <button
+                                        key={idx}
+                                        className={`thumbnail-btn ${idx === activeImageIndex ? 'active' : ''}`}
+                                        onClick={() => setActiveImageIndex(idx)}
+                                        aria-label={`View image ${idx + 1}`}
+                                    >
+                                        <img src={getImageUrl(img)} alt={`${product.name} thumbnail ${idx + 1}`} />
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     {/* Details - Right */}
@@ -147,10 +257,18 @@ const ProductDetail = () => {
                                 rel="noopener noreferrer"
                                 className="btn-primary whatsapp-cta-btn"
                             >
-                                Order on WhatsApp
+                                Order Now
                             </a>
-                            <button className="btn-secondary add-to-cart-btn" onClick={() => alert("Added to cart (Placeholder)")}>
-                                Add to Cart
+                            <button
+                                className="btn-secondary add-to-cart-btn"
+                                onClick={() => {
+                                    addToCart(product, selectedVariant, quantity);
+                                    setCartAdded(true);
+                                    setTimeout(() => setCartAdded(false), 2000);
+                                }}
+                            >
+                                <ShoppingBag size={18} />
+                                {cartAdded ? '✓ Added!' : 'Add to Cart'}
                             </button>
                         </div>
                     </div>
@@ -182,6 +300,105 @@ const ProductDetail = () => {
                 </div>
             </div>
         </div>
+
+        {/* Lightbox Overlay */}
+        {lightboxOpen && product?.images?.length > 0 && (
+            <div
+                className="lightbox-overlay"
+                onClick={(e) => { if (e.target === e.currentTarget) closeLightbox(); }}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Image viewer"
+            >
+                {/* Top bar */}
+                <div className="lightbox-topbar">
+                    <span className="lightbox-counter">
+                        {activeImageIndex + 1} / {product.images.length}
+                    </span>
+                    <div className="lightbox-zoom-controls">
+                        <button
+                            className="lb-ctrl-btn"
+                            onClick={() => setZoomLevel(z => Math.max(z - 0.5, 1))}
+                            disabled={zoomLevel <= 1}
+                            aria-label="Zoom out"
+                        >
+                            <ZoomOut size={20} />
+                        </button>
+                        <span className="zoom-label">{Math.round(zoomLevel * 100)}%</span>
+                        <button
+                            className="lb-ctrl-btn"
+                            onClick={() => setZoomLevel(z => Math.min(z + 0.5, 4))}
+                            disabled={zoomLevel >= 4}
+                            aria-label="Zoom in"
+                        >
+                            <ZoomIn size={20} />
+                        </button>
+                        <button
+                            className="lb-ctrl-btn"
+                            onClick={() => setZoomLevel(1)}
+                            aria-label="Reset zoom"
+                            title="Reset zoom"
+                        >
+                            Reset
+                        </button>
+                    </div>
+                    <button className="lb-close-btn" onClick={closeLightbox} aria-label="Close">
+                        <X size={24} />
+                    </button>
+                </div>
+
+                {/* Main image area */}
+                <div className="lightbox-img-area">
+                    {product.images.length > 1 && (
+                        <button
+                            className="lb-arrow lb-arrow-prev"
+                            onClick={lightboxPrev}
+                            aria-label="Previous image"
+                        >
+                            <ChevronLeft size={30} />
+                        </button>
+                    )}
+                    <div className="lightbox-img-wrapper" style={{ overflow: zoomLevel > 1 ? 'auto' : 'hidden' }}>
+                        <img
+                            src={getImageUrl(product.images[activeImageIndex])}
+                            alt={`${product.name} - image ${activeImageIndex + 1}`}
+                            className="lightbox-img"
+                            style={{
+                                transform: `scale(${zoomLevel})`,
+                                cursor: zoomLevel > 1 ? 'move' : 'zoom-in',
+                            }}
+                            onClick={() => setZoomLevel(z => z < 4 ? z + 0.5 : 1)}
+                        />
+                    </div>
+                    {product.images.length > 1 && (
+                        <button
+                            className="lb-arrow lb-arrow-next"
+                            onClick={lightboxNext}
+                            aria-label="Next image"
+                        >
+                            <ChevronRight size={30} />
+                        </button>
+                    )}
+                </div>
+
+                {/* Thumbnail strip */}
+                {product.images.length > 1 && (
+                    <div className="lightbox-thumbs">
+                        {product.images.map((img, idx) => (
+                            <button
+                                key={idx}
+                                className={`lb-thumb-btn ${idx === activeImageIndex ? 'active' : ''}`}
+                                onClick={() => { setActiveImageIndex(idx); setZoomLevel(1); }}
+                                aria-label={`View image ${idx + 1}`}
+                            >
+                                <img src={getImageUrl(img)} alt={`${product.name} thumbnail ${idx + 1}`} />
+                            </button>
+                        ))}
+                    </div>
+                )}
+            </div>
+        )}
+        </>
     );
 };
 

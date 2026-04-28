@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useProducts } from '../hooks/useProducts';
+import { getImageUrl } from '../utils/helpers';
 import ProductCard from '../components/ProductCard';
 import './SearchPage.css';
 
@@ -74,7 +75,7 @@ const SearchPage = () => {
                             <div className="category-grid" style={{ marginTop: '2rem' }}>
                                 {categories.map((cat, index) => (
                                     <Link to={`/category/${cat.slug}`} key={index} className="suggestion-card">
-                                        <img src={cat.image} alt={cat.name} />
+                                        <img src={getImageUrl(cat.image)} alt={cat.name} />
                                         <span>{cat.name}</span>
                                     </Link>
                                 ))}

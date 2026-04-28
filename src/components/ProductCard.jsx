@@ -1,10 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Eye } from 'lucide-react';
+import { ShoppingBag, Eye, Heart } from 'lucide-react';
+import { getImageUrl } from '../utils/helpers';
+import { useFavorites } from '../context/FavoritesContext';
 import './ProductCard.css';
 
 const ProductCard = ({ product }) => {
     const { slug, name, price, images, tags, category } = product;
+    const { toggleFavorite, isFavorite } = useFavorites();
+    const favorited = isFavorite(slug);
 
     const displayCategory = category ? category.replace(/-/g, ' ').toUpperCase() : '';
 
@@ -28,19 +32,36 @@ const ProductCard = ({ product }) => {
     return (
         <div className="product-card">
             <Link to={`/product/${slug}`} className="product-image-container">
+                {/* Primary image */}
                 <div className="product-image-placeholder">
                     {images && images.length > 0 ? (
-                        <img src={images[0]} alt={name} loading="lazy" />
+                        <img src={getImageUrl(images[0])} alt={name} loading="lazy" />
                     ) : (
                         <span>Product Image</span>
                     )}
                 </div>
-                <div className="product-view-overlay">
-                    <span className="btn-view-option">
-                        <Eye size={18} /> View Details
-                    </span>
-                </div>
 
+                {/* Secondary hover image (if available) */}
+                {images && images.length > 1 ? (
+                    <div className="product-image-hover">
+                        <img src={getImageUrl(images[1])} alt={`${name} – alternate view`} loading="lazy" />
+                    </div>
+                ) : (
+                    /* Fallback: show view-details overlay when no second image */
+                    <div className="product-view-overlay">
+                        <span className="btn-view-option">
+                            <Eye size={18} /> View Details
+                        </span>
+                    </div>
+                )}
+
+                <button
+                    className={`wishlist-btn${favorited ? ' wishlist-btn--active' : ''}`}
+                    aria-label={favorited ? 'Remove from wishlist' : 'Add to wishlist'}
+                    onClick={(e) => { e.preventDefault(); toggleFavorite(product); }}
+                >
+                    <Heart size={18} fill={favorited ? 'currentColor' : 'none'} />
+                </button>
             </Link>
 
             <div className="product-info">
@@ -68,7 +89,7 @@ const ProductCard = ({ product }) => {
                         rel="noopener noreferrer"
                         className="btn-order-whatsapp"
                     >
-                        <ShoppingBag size={18} /> Order via WhatsApp
+                        <ShoppingBag size={18} /> Order Now
                     </a>
                 </div>
             </div>
